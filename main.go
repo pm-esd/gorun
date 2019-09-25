@@ -364,7 +364,6 @@ func Autobuild(files []string) {
 	filenameWithSuffix := path.Base(runcmd)
 	fileSuffix := path.Ext(filenameWithSuffix)
 	filenameOnly := strings.TrimSuffix(filenameWithSuffix, fileSuffix) //获取文件名
-	fmt.Println(filenameOnly)
 	args := []string{"build"}
 	if ostype == "windows" {
 		build = build + "/" + filenameOnly + ".exe"
@@ -408,7 +407,7 @@ func Kill() {
 
 //Restart restart app
 func Restart(appname string) {
-	Debugf("杀掉进程")
+	// Debugf("杀掉进程")
 	Kill()
 	go Start(appname)
 }
