@@ -1,0 +1,6 @@
+#忽略文件
+ignorefile = [".doc",".md"]
+#忽略文件夹
+ignoredir = ["docs","swagger","vendor","build","examples"]
+#构建的文件文件夹
+build = "build"
