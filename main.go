@@ -24,11 +24,13 @@ import (
 var configFile string = "watch.toml"
 
 func AppPath() string {
-	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+
+	dir, err := os.Getwd()
 	if err != nil {
 		Fatalf("不能获取程序执行的目录:", err)
 	}
-	return dir
+	return strings.Replace(dir, "\\", "/", -1)
+
 }
 
 func ParseConfig() *config.Config {
@@ -415,6 +417,7 @@ func Restart(appname string) {
 //Start start app
 func Start(appname string) {
 	Infof("开始运行 %s ...\n", appname)
+
 	cmd = exec.Command(appname)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
