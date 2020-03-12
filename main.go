@@ -421,6 +421,10 @@ func Start(appname string) {
 	cmd = exec.Command(appname)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
+
+	cmd.Args = append([]string{appname}, cmdArgs...)
+
+	Infof("Run %s", strings.Join(cmd.Args, " "))
 	go cmd.Run()
 	Infof("%s 运行中...\n", appname)
 	started <- true
@@ -434,12 +438,15 @@ var (
 	currpath string
 	exit     chan bool
 	runcmd   string
+	runArgs  string
+	cmdArgs  []string
 	Output   string
 	started  chan bool
 )
 
 func init() {
-	flag.StringVar(&runcmd, "run", "", "要运行的Go文件,多个文件使用,分割")
+	flag.StringVar(&runcmd, "run", "", "要运行的Go文件")
+	flag.StringVar(&runArgs, "args", "", "参数")
 }
 
 func main() {
@@ -451,9 +458,12 @@ func main() {
 	currpath = AppPath()
 
 	if len(runcmd) < 1 {
-		Fatalf("命令行参数没有填写\n")
+		Fatalf("要运行的Go文件没有填写\n")
 	}
-	//多个文件或者一个文件
+
+	if runArgs != "" {
+		cmdArgs = strings.Split(runArgs, ",")
+	}
 
 	runFile := currpath + "/" + runcmd
 	runFile = strings.Replace(runFile, "\\", "/", -1)
